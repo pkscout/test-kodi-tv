@@ -1,13 +1,19 @@
 const path = require('path')
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+const config = require("./gatsby-site-config")
 
 module.exports = {
-  siteMetadata: {
-    title: 'Gatsby Starter MDX Basic',
-    description:
-      'Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.',
-    author: '@chrisbiscardi',
-  },
+  siteMetadata: config.siteMetadata,
   plugins: [
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `pages`,
+        path: `${__dirname}/src/pages/`,
+      },
+    },
     {
       resolve: `gatsby-plugin-mdx`,
       options: {
@@ -27,15 +33,16 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: 'gatsby-default-mdx-basic',
-        short_name: 'starter',
+        name: 'gatsby-kodi-tv',
+        short_name: 'website',
         start_url: '/',
         background_color: '#663399',
         theme_color: '#663399',
         display: 'minimal-ui',
-        icon: 'src/images/gatsby-icon.png', // This path is relative to the root of the site.
+        icon: 'static/images/kodi-logo.png', // This path is relative to the root of the site.
       },
     },
+    'gatsby-plugin-postcss'
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.app/offline
     // 'gatsby-plugin-offline',

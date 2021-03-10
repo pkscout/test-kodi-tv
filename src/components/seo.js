@@ -1,68 +1,43 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-import { StaticQuery, graphql } from 'gatsby'
+const config = require("/gatsby-site-config")
 
-function SEO({ description, lang, meta, keywords, title }) {
+function SEO({ description, lang, meta, keywords, title, breadcrumbs }) {
   return (
-    <StaticQuery
-      query={detailsQuery}
-      render={data => {
-        const metaDescription =
-          description || data.site.siteMetadata.description
-        return (
-          <Helmet
-            htmlAttributes={{
-              lang,
-            }}
-            title={title}
-            titleTemplate={`%s | ${data.site.siteMetadata.title}`}
-            meta={[
-              {
-                name: 'description',
-                content: metaDescription,
-              },
-              {
-                property: 'og:title',
-                content: title,
-              },
-              {
-                property: 'og:description',
-                content: metaDescription,
-              },
-              {
-                property: 'og:type',
-                content: 'website',
-              },
-              {
-                name: 'twitter:card',
-                content: 'summary',
-              },
-              {
-                name: 'twitter:creator',
-                content: data.site.siteMetadata.author,
-              },
-              {
-                name: 'twitter:title',
-                content: title,
-              },
-              {
-                name: 'twitter:description',
-                content: metaDescription,
-              },
-            ]
-              .concat(
-                keywords.length > 0
-                  ? {
-                      name: 'keywords',
-                      content: keywords.join(', '),
-                    }
-                  : []
-              )
-              .concat(meta)}
-          />
-        )
+    <Helmet
+      htmlAttributes={{
+        lang,
       }}
+      title={breadcrumbs}
+      titleTemplate={`${config.siteMetadata.title} | %s`}
+      meta={[
+        {
+          name: 'description',
+          content: config.siteMetadata.description,
+        },
+        {
+          property: 'og:title',
+          content: config.siteMetadata.title,
+        },
+        {
+          property: 'og:description',
+          content: config.siteMetadata.description,
+        },
+        {
+          property: 'og:type',
+          content: 'website',
+        },
+      ]
+        .concat(
+          keywords.length > 0
+            ? {
+                name: 'keywords',
+                content: keywords.join(', '),
+              }
+            : []
+        )
+        .concat(meta)}
     />
   )
 }
@@ -78,19 +53,8 @@ SEO.propTypes = {
   lang: PropTypes.string,
   meta: PropTypes.array,
   keywords: PropTypes.arrayOf(PropTypes.string),
+  breadcrumbs: PropTypes.string,
   title: PropTypes.string.isRequired,
 }
 
 export default SEO
-
-const detailsQuery = graphql`
-  query DefaultSEOQuery {
-    site {
-      siteMetadata {
-        title
-        description
-        author
-      }
-    }
-  }
-`
