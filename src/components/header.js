@@ -7,10 +7,12 @@ import Social from './social'
 function Header (props) {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
   const mainMenu = [
-    {title: 'News', url: '/blog'},
-    {title: 'Download', url: '/download'},
-    {title: 'Add-ons', url: '/addons'},
-    {title: 'More', url: '#'},
+    {title: 'News', url: '/blog', collapseto: null},
+    {title: 'Download', url: '/download', collapseto: null},
+    {title: 'Add-ons', url: '/addons', collapseto: null},
+    {title: 'Get Help', url: '/gethelp', collapseto: 'more'},
+    {title: 'Contribute', url: '/contribute', collapseto: 'more'},
+    {title: 'About', url: '/about', collapseto: 'more'},
   ]
   let breadcrumbs = ''
   if (props.frontmatter.breadcrumbs !== undefined) {
@@ -26,11 +28,21 @@ function Header (props) {
               <div class="flex-shrink-0">
                 <img class="h-8 w-24" src="/images/kodi-logo-with-text.png" alt="Kodi Logo" />
               </div>
-              <div class="hidden md:block">
+              <div class="hidden lg:block">
                 <div class="ml-10 flex items-baseline space-x-4">
                   {mainMenu.map((item, index) => (
                     <a href={item.url} class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{item.title}</a>
                   ))}
+                </div>
+              </div>
+              <div class="hidden md:block lg:hidden">
+                <div class="ml-10 flex items-baseline space-x-4">
+                  {mainMenu.map((item, index) => (
+                    item.collapseto === null
+                      ? <a href={item.url} class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{item.title}</a>
+                      : ''
+                  ))}
+                  <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">More</a>
                 </div>
               </div>
             </div>
