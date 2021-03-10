@@ -26,7 +26,7 @@ function Header (props) {
           <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
               <div class="flex-shrink-0">
-                <img class="h-8 w-24" src="/images/kodi-logo-with-text.png" alt="Kodi Logo" />
+                <a href="/"><img class="h-8 w-24" src="/images/kodi-logo-with-text.png" title="Home" alt="Kodi Logo" /></a>
               </div>
               <div class="hidden lg:block">
                 <div class="ml-10 flex items-baseline space-x-4">
