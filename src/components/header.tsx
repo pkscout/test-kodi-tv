@@ -3,17 +3,72 @@ import { useState } from 'react'
 import { Transition } from '@headlessui/react'
 import SEO from './seo'
 import Social from './social'
+import HeaderDropdownMenu from './headermenu'
+
+const mainMenu = [
+  { title: 'About',
+    url: '/about',
+    collapseto: 'more',
+    description: 'More information about Kodi and our other software packages, how to contact us, our sponsors, and the Kodi foundation.',
+    footer: null,
+    dropdown: [ 
+      {title: 'About Kodi', url: '/about', description: 'Find out everything Kodi can do for you.'},
+      {title: 'Contact', url: '/about/contact', description: 'Contact the Kodi team about support corporate enquiries, or sponsorships.'},
+      {title: 'Sponsors', url: '/about/sponsors', description: 'a list of companies supporting the work we do.'},
+      {title: 'Software', url: '/about/software', description: 'Information about the suite of software we offer.'},
+      {title: 'Foundation', url: '/about/software', description: 'A description of the structure of functions of the Kodi Foundation.'},
+    ]
+  },
+  { title: 'News', url: '/blog', collapseto: null, description: null, dropdown: null, footer: null },
+  { title: 'Download', url: '/download', collapseto: null, description: null, dropdown: null, footer: null },
+  { title: 'Add-ons',
+    url: '/addons',
+    collapseto: null,
+    description: null,
+    footer: 'Add-on availability depends on your version of Kodi, so please select the version you are running.',
+    dropdown: [
+      {title: 'Matrix Add-ons', url: '/addons/matrix', description: 'Add-ons for Kodi 19, the latest and greatest version of Kodi.'},
+      {title: 'Leia Add-ons', url: '/addons/leia', description: 'Add-ons for Kodi 18, the most recent previous version of Kodi.'}
+    ]
+  },
+  { title: 'Get Help',
+    url: '/gethelp',
+    collapseto: 'more',
+    description: "Information on our forums, user documentation, and developer resources.",
+    footer: null,
+    dropdown: [
+      {title: 'Forum', url: 'https://forum.kodi.tv', description: 'Our user forum for asking questions and finding answers.'},
+      {title: 'Wiki', url: 'https://kodi.wiki', description: 'Our user documentation and how-to guides.'},
+      {title: 'Developer Resources', url: 'https://docs.kodi.tv', description: 'Documentation, including skin development and interfaces for Python and C++ .'}
+    ]
+  },
+  { title: 'Contribute',
+    url: '/contribute',
+    collapseto: 'more',
+    description: 'Learn about working on the Kodi project, donating, or even buying merchandise.',
+    footer: null,
+    dropdown: [ 
+      {title: 'Working on Kodi', url: '/contribute', description: 'We are always looking for people to help develop and support Kodi.'},
+      {title: 'Donate', url: '/donate', description: 'Funds we raise go to improving and extending the goals of the Kodi Foundation.'},
+      {title: 'Store', url: '/store', description: 'Buy Kodi merchandise.'},
+    ]
+  },
+]
+
+function menuCollapse(menuname) {
+  let newmenu = {title: menuname, url: null, collapseto: null, description: null, footer: null, dropdown: []}
+  for (let i=0; i < mainMenu.length; i++) {
+    if (mainMenu[i].collapseto !== null) {
+      if (mainMenu[i].collapseto.toLowerCase() === menuname.toLowerCase()) {
+        newmenu.dropdown.push(mainMenu[i])
+      }
+    }
+  }
+  return newmenu
+}
 
 function Header (props) {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
-  const mainMenu = [
-    {title: 'News', url: '/blog', collapseto: null},
-    {title: 'Download', url: '/download', collapseto: null},
-    {title: 'Add-ons', url: '/addons', collapseto: null},
-    {title: 'Get Help', url: '/gethelp', collapseto: 'more'},
-    {title: 'Contribute', url: '/contribute', collapseto: 'more'},
-    {title: 'About', url: '/about', collapseto: 'more'},
-  ]
   let breadcrumbs = ''
   if (props.frontmatter.breadcrumbs !== undefined) {
     breadcrumbs = props.frontmatter.breadcrumbs
@@ -29,20 +84,24 @@ function Header (props) {
                 <a href="/"><img class="h-8 w-24" src="/images/kodi-logo-with-text.png" title="Home" alt="Kodi Logo" /></a>
               </div>
               <div class="hidden lg:block">
-                <div class="ml-10 flex items-baseline space-x-4">
+                <div class="ml-10 flex items-baseline space-x-2">
                   {mainMenu.map((item, index) => (
-                    <a href={item.url} class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{item.title}</a>
+                    item.dropdown == null
+                      ? <a href={item.url} class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{item.title}</a>
+                      : <HeaderDropdownMenu menu={item} />
                   ))}
-                </div>
+                </div>                
               </div>
               <div class="hidden md:block lg:hidden">
                 <div class="ml-10 flex items-baseline space-x-4">
                   {mainMenu.map((item, index) => (
                     item.collapseto === null
-                      ? <a href={item.url} class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{item.title}</a>
+                      ? item.dropdown == null
+                          ? <a href={item.url} class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{item.title}</a>
+                          : <HeaderDropdownMenu menu={item} />
                       : ''
                   ))}
-                  <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">More</a>
+                  <HeaderDropdownMenu menu={menuCollapse('More')} />
                 </div>
               </div>
             </div>
