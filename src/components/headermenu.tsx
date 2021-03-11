@@ -6,7 +6,7 @@ function HeaderDropdownMenu (props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   return (
     <>
-      <div onMouseLeave={() => setIsDropdownOpen(false)} onMouseEnter={() => setIsDropdownOpen(true)} class="relative">
+      <div onMouseLeave={() => setIsDropdownOpen(false)} class="relative">
         <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} type="button" class="inline-flex items-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-expanded="false">
           <span>{props.menu.title}</span>
           <svg class="text-gray-400 ml-2 h-5 w-5 group-hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
